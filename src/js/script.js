@@ -110,16 +110,13 @@
 
     initAccordion(){
       const thisProduct = this;
-
       const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
 
       clickableTrigger.addEventListener('click', function(event){
         event.preventDefault();
-
         const activeProduct = document.querySelector('.product.active');
-        console.log('activeProduct', activeProduct);
 
-        if( activeProduct && activeProduct != thisProduct){
+        if(activeProduct && activeProduct != thisProduct.element){
           activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
         }
 
