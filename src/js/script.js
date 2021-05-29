@@ -55,8 +55,6 @@
   const app = {
     initMenu: function(){
       const thisApp = this;
-
-      console.log('thisApp.data:', thisApp.data);
       
       for(let productData in thisApp.data.products){
         new Product(productData, thisApp.data.products[productData]);
@@ -69,11 +67,6 @@
     },
     init: function(){
       const thisApp = this;
-      console.log('*** App starting ***');
-      console.log('thisApp:', thisApp);
-      console.log('classNames:', classNames);
-      console.log('settings:', settings);
-      console.log('templates:', templates);
 
       thisApp.initData();
       thisApp.initMenu();
@@ -153,8 +146,6 @@
         event.preventDefault();
         thisProduct.processOrder();
       });
-
-      console.log();
     }
 
     processOrder(){
@@ -170,10 +161,8 @@
 
           if(formData[paramId].includes(optionId) && !option.default){
             price += option.price;
-          } else if(formData[paramId].includes(optionId) && option.default){
-            price += 0;
           } else if(!formData[paramId].includes(optionId) && option.default){
-            price = price - option.price;
+            price -= option.price;
           }
         }
       }
