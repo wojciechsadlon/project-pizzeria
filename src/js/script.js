@@ -40,7 +40,7 @@
     },
   };
 
-  const settings = {
+  const settings = { // eslint-disable-line
     amountWidget: {
       defaultValue: 1,
       defaultMin: 1,
@@ -67,7 +67,6 @@
     },
     init: function(){
       const thisApp = this;
-      console.log(settings);
 
       thisApp.initData();
       thisApp.initMenu();
@@ -161,18 +160,17 @@
         for(let optionId in param.options) {
           const option = param.options[optionId];
           const activeImg = thisProduct.imageWrapper.querySelector('[class~="' + paramId + '-' + optionId + '"]');
+          const isOptionChosen = formData[paramId].includes(optionId);
 
-          if(activeImg){
+          if(activeImg && isOptionChosen){
+            activeImg.classList.add(classNames.menuProduct.wrapperActive);
+          } else if (activeImg){
             activeImg.classList.remove(classNames.menuProduct.wrapperActive);
+          }
 
-            if(formData[paramId].includes(optionId)){
-              activeImg.classList.add(classNames.menuProduct.wrapperActive);
-            }
-          } 
-
-          if(formData[paramId].includes(optionId) && !option.default){
+          if(isOptionChosen && !option.default){
             price += option.price;
-          } else if(!formData[paramId].includes(optionId) && option.default){
+          } else if(!isOptionChosen && option.default){
             price -= option.price;
           }
         }
