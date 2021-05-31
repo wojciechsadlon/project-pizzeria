@@ -156,16 +156,18 @@
     
       for(let paramId in thisProduct.data.params) {
         const param = thisProduct.data.params[paramId];
-  
+
         for(let optionId in param.options) {
           const option = param.options[optionId];
           const activeImg = thisProduct.imageWrapper.querySelector('[class~="' + paramId + '-' + optionId + '"]');
           const isOptionChosen = formData[paramId].includes(optionId);
 
-          if(activeImg && isOptionChosen){
-            activeImg.classList.add(classNames.menuProduct.wrapperActive);
-          } else if (activeImg){
-            activeImg.classList.remove(classNames.menuProduct.wrapperActive);
+          if(activeImg){
+            if(isOptionChosen){
+              activeImg.classList.add(classNames.menuProduct.wrapperActive)}
+            else{
+              activeImg.classList.remove(classNames.menuProduct.wrapperActive);
+            }
           }
 
           if(isOptionChosen && !option.default){
