@@ -141,6 +141,7 @@
       thisCart.products = [];
 
       thisCart.getElements(element);
+      thisCart.add(element);
       thisCart.initActions();
     }
 
@@ -150,6 +151,7 @@
       thisCart.dom = {};
       
       thisCart.dom.wrapper = element;
+      thisCart.dom.productList = document.querySelector(select.cart.productList);
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
     }
 
@@ -159,6 +161,14 @@
       thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
+    }
+
+    add(menuProduct){
+      const thisCart = this;
+      const generatedHTML = templates.cartProduct(menuProduct);
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+
+      thisCart.dom.productList.appendChild(generatedDOM);
     }
   }
 
@@ -207,34 +217,28 @@
 
     renderInMenu(){
       const thisProduct = this;
-
-      // generate HTML based on template
       const generatedHTML = templates.menuProduct(thisProduct.data);
 
-      // create element using utils.createElementFromHTML
       thisProduct.element = utils.createDOMFromHTML(generatedHTML);
 
-      // find menu container
       const menuContainer = document.querySelector(select.containerOf.menu);
 
-      // add element to menu
       menuContainer.appendChild(thisProduct.element);
     }
 
     getElements(){
       const thisProduct = this;
+      const productForm = thisProduct.element.querySelector(select.menuProduct.form);
     
       thisProduct.dom = {
         imageWrapper: thisProduct.element.querySelector(select.menuProduct.imageWrapper),
         accordionTrigger: thisProduct.element.querySelector(select.menuProduct.clickable),
-        form: thisProduct.element.querySelector(select.menuProduct.form),
-        // formInputs: thisProduct.dom.form.querySelectorAll(select.all.formInputs),
+        form: productForm,
+        formInputs: productForm.querySelectorAll(select.all.formInputs),
         cartButton: thisProduct.element.querySelector(select.menuProduct.cartButton),
         priceElem: thisProduct.element.querySelector(select.menuProduct.priceElem),
         amountWidgetElem: thisProduct.element.querySelector(select.menuProduct.amountWidget)
       };
-      // w ćwiczeniu było zasugerowane utworzenie z tych elementow obiektu DOM ale wtedy chyba na etapie tworzenia wartość dom.formInputs nie mogła zostać pobrana z undefined.
-      thisProduct.dom.formInputs = thisProduct.dom.form.querySelectorAll(select.all.formInputs);
     }
 
     initAccordion(){
@@ -269,6 +273,7 @@
       thisProduct.dom.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
 
@@ -308,8 +313,56 @@
         }
       }
       
+      thisProduct.priceSingle = price;
       price *= thisProduct.amountWidget.value;
       thisProduct.dom.priceElem.innerHTML = price;
+    }
+
+    prepareCartProductParams(){
+      const thisProduct = this;
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
+      const params = {};
+
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+        params[paramId] = {
+          label: param.label,
+          options: {}
+        };
+
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const isOptionChosen = formData[paramId].includes(optionId);
+
+          if(isOptionChosen){
+            params[paramId].options[optionId] = option.label;
+          }
+        }
+      }
+
+      return params;
+    }
+    
+
+    prepareCartProduct(){
+      const thisProduct = this;
+
+      const productSummary = {
+        id: thisProduct.id,
+        name: thisProduct.data.name,
+        amount: thisProduct.amountWidget.value,
+        priceSingle: thisProduct.priceSingle,
+        price: thisProduct.priceSingle * thisProduct.amountWidget.value,
+        params: thisProduct.prepareCartProductParams(),
+      };
+
+      return productSummary;
+    }
+
+    addToCart(){
+      const thisProduct = this;
+
+      app.cart.add(thisProduct.prepareCartProduct());
     }
   }
 
