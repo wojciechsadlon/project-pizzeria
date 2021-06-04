@@ -141,7 +141,6 @@
       thisCart.products = [];
 
       thisCart.getElements(element);
-      thisCart.add(element);
       thisCart.initActions();
     }
 
