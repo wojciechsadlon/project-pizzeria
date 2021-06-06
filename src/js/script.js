@@ -71,6 +71,11 @@
     cart: {
       defaultDeliveryFee: 20,
     },
+    db: {
+      url: '//localhost:3131',
+      products: 'products',
+      orders: 'orders',
+    },
   };
 
   const templates = {
@@ -158,7 +163,9 @@
       thisCart.dom.subTotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
       thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
       thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
-
+      thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
+      thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
+      thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
     }
 
     initActions(){
@@ -172,6 +179,10 @@
       });
       thisCart.dom.productList.addEventListener('remove', function(event){
         thisCart.remove(event.detail.cartProduct);
+      });
+      thisCart.dom.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisCart.sendOrder();
       });
     }
 
@@ -188,24 +199,23 @@
     update(){
       const thisCart = this;
       const deliveryFee = settings.cart.defaultDeliveryFee;
-      let totalNumber = 0;
-      let subTotalPrice = 0;
+      thisCart.totalNumber = 0;
+      thisCart.subTotalPrice = 0;
       thisCart.totalPrice = 0;
 
       for(let product of thisCart.products){
-        totalNumber += product.amount;
-        subTotalPrice += product.price;
+        thisCart.totalNumber += product.amount;
+        thisCart.subTotalPrice += product.price;
       }
-      if(totalNumber!=0){
-        thisCart.totalPrice = subTotalPrice + deliveryFee;
+      if(thisCart.totalNumber){
+        thisCart.totalPrice = thisCart.subTotalPrice + deliveryFee;
         thisCart.dom.deliveryFee.innerHTML = deliveryFee;
       }else{
         thisCart.dom.deliveryFee.innerHTML = 0;
       }
 
-      thisCart.dom.subTotalPrice.innerHTML = subTotalPrice;
-      // thisCart.dom.totalPrice.innerHTML = thisCart.totalPrice; // jak jest querySelector to wybiera pierwszy, a jak All to nie nadaje żadnemu innera bo otrzymuje tablice, musialem zrobic loopa
-      thisCart.dom.totalNumber.innerHTML = totalNumber;
+      thisCart.dom.subTotalPrice.innerHTML = thisCart.subTotalPrice;
+      thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
 
       for(let total of thisCart.dom.totalPrice){
         total.innerHTML = thisCart.totalPrice;
@@ -222,6 +232,40 @@
       thisCart.dom.productList.querySelector('.remove').remove();
 
       thisCart.update();
+    }
+
+    sendOrder(){
+      const thisCart = this;
+      const url = settings.db.url + '/' + settings.db.orders;
+      
+      const payload = {
+        address: thisCart.dom.address.value,
+        phone: thisCart.dom.phone.value,
+        totalPrice: thisCart.totalPrice,
+        subTotalPrice: thisCart.subTotalPrice,
+        totalNumber: thisCart.totalNumber,
+        deliveryFee: settings.cart.defaultDeliveryFee,
+        products: []
+      };
+
+      for(let prod of thisCart.products){
+        payload.products.push(prod.getData());
+      }
+
+      const options = { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload) 
+      };
+
+      fetch(url, options)
+        .then(function(response){
+          return response.json();
+        }).then(function(parsedResponse){
+          console.log('parsedResponse', parsedResponse);
+        });
     }
   }
 
@@ -249,6 +293,21 @@
       thisCartProduct.dom.price = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.price);
       thisCartProduct.dom.edit = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.edit);
       thisCartProduct.dom.remove = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.remove);
+    }
+
+    getData(){
+      const thisCartProduct = this;
+
+      const payload = {
+        id: thisCartProduct.id,
+        amount: thisCartProduct.amount,
+        price: thisCartProduct.price,
+        priceSingle: thisCartProduct.priceSingle,
+        name: thisCartProduct.name,
+        params: thisCartProduct.params,
+      };
+      console.log(payload);
+      return payload;
     }
 
     initActions(){
@@ -292,13 +351,23 @@
       const thisApp = this;
       
       for(let productData in thisApp.data.products){
-        new Product(productData, thisApp.data.products[productData]);
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       }
     },
     initData: function(){
       const thisApp = this;
+      const url = settings.db.url + '/' + settings.db.products;
 
-      thisApp.data = dataSource;
+      fetch(url)
+        .then(function(rawResponse){
+          return rawResponse.json();
+        })
+        .then(function(parsedResponse){
+          thisApp.data.products = parsedResponse;
+          thisApp.initMenu();
+        });
+
+      thisApp.data = {};
     },
     initCart: function(){
       const thisApp = this;
@@ -310,7 +379,6 @@
       const thisApp = this;
 
       thisApp.initData();
-      thisApp.initMenu();
       thisApp.initCart();
     },
   };
@@ -478,6 +546,10 @@
       const thisProduct = this;
 
       app.cart.add(thisProduct.prepareCartProduct());
+
+      // thisProduct.element.classList.add('changed');
+
+      // document.querySelector(select.containerOf.menu).removeChild(thisProduct.element);
     }
   }
 
