@@ -183,6 +183,7 @@
       thisCart.dom.form.addEventListener('submit', function(event){
         event.preventDefault();
         thisCart.sendOrder();
+        thisCart.clearCart();
       });
     }
 
@@ -266,6 +267,22 @@
         }).then(function(parsedResponse){
           console.log('parsedResponse', parsedResponse);
         });
+    }
+
+    clearCart(){
+      const thisCart = this;
+      const cartElem = thisCart.dom.productList.querySelectorAll('li');
+
+      thisCart.products = [];
+
+      for(let elem of cartElem){
+        elem.remove();
+      }
+
+      thisCart.dom.address.value = '';
+      thisCart.dom.phone.value = '';
+
+      thisCart.update();
     }
   }
 
@@ -457,6 +474,7 @@
         event.preventDefault();
         thisProduct.processOrder();
         thisProduct.addToCart();
+        thisProduct.resetProduct();
       });
     }
 
@@ -546,10 +564,36 @@
       const thisProduct = this;
 
       app.cart.add(thisProduct.prepareCartProduct());
+    }
 
-      // thisProduct.element.classList.add('changed');
+    resetProduct(){
+      const thisProduct = this;
+      const forms = thisProduct.dom.formInputs;
 
-      // document.querySelector(select.containerOf.menu).removeChild(thisProduct.element);
+      console.log(forms);
+      for(let form of forms){
+
+        if(form.className === 'amount'){
+          form.value = 1;
+        }else if(form.defaultChecked){
+          form.checked = true;
+        }else if(!form.defaultChecked){
+          form.checked = false;
+        }
+        // jesli polacze dolnego ifa jako else if z gornym to skrypt nie zadziala (?)
+        if(form.length){
+          for(let option of form){
+            if(!option.defaultSelected){
+              option.selected = false;
+            }else if(option.defaultSelected){
+              option.selected = true;
+            }
+          }
+        }
+      }
+
+      thisProduct.processOrder();
+      // po resecie opcji ta funkcja może jest pewnym obejsciem resetowania ustawien obrazka ale skoro mamy domyslne ustawienia produktu to nic nie psuje ;)
     }
   }
 
