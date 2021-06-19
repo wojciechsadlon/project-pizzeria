@@ -169,7 +169,7 @@ class Product{
     const event = new CustomEvent('add-to-cart', {
       bubbles: true,
       detail: {
-        product: thisProduct
+        product: thisProduct.prepareCartProduct()
       }
     });
 
@@ -180,7 +180,6 @@ class Product{
     const thisProduct = this;
     const forms = thisProduct.dom.formInputs;
 
-    console.log(forms);
     for(let form of forms){
 
       if(form.className === 'amount'){
@@ -190,7 +189,6 @@ class Product{
       }else if(!form.defaultChecked){
         form.checked = false;
       }
-      // jesli polacze dolnego ifa jako else if z gornym to skrypt nie zadziala (?)
       if(form.length){
         for(let option of form){
           if(!option.defaultSelected){
