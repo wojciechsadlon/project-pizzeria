@@ -201,6 +201,7 @@ class Product{
     }
 
     thisProduct.processOrder();
+    thisProduct.dom.priceElem.innerHTML = thisProduct.data.price;
   }
 }
 
