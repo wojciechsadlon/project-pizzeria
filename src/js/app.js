@@ -1,4 +1,3 @@
-/* eslint-disable semi */
 import {settings, select, classNames} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
@@ -16,7 +15,7 @@ const app = {
     let pageMatchingHash = thisApp.pages[0].id;
 
     for(let page of thisApp.pages){
-      if(page.id == idFromHash){
+      if(page.id === idFromHash){
         pageMatchingHash = page.id;
         break;
       }
@@ -55,10 +54,9 @@ const app = {
     for(let link of thisApp.navLinks){
       link.classList.toggle(
         classNames.nav.active, 
-        link.getAttribute('href') == '#' + pageId
-      )
+        link.getAttribute('href') === '#' + pageId
+      );
     }
-
   },
 
   initMenu: function(){
