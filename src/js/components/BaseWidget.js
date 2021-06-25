@@ -33,7 +33,6 @@ class BaseWidget{
     thisWidget.value = value;
   }
 
-  // po co to wydzielac skoro nawet sam zapis parseInt jest krótszy?
   parseValue(value){
     return parseInt(value);
   }
