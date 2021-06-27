@@ -156,6 +156,10 @@
       }
   
     }
+
+    &.choosed {
+      background-color: $color-choosed;
+    }
   
     &.booked {
       cursor: not-allowed;

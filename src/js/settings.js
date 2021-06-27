@@ -61,6 +61,8 @@ export const select = {
     peopleAmount: '.people-amount',
     hoursAmount: '.hours-amount',
     tables: '.floor-plan .table',
+    phone: 'input[name="phone"]',
+    address: 'input[name="address"]',
   },
   nav: {
     links: '.main-nav a',
@@ -78,6 +80,7 @@ export const classNames = {
   booking: {
     loading: 'loading',
     tableBooked: 'booked',
+    tableChoosed: 'choosed',
   },
   nav: {
     active: 'active',
@@ -102,8 +105,8 @@ export const settings = {
     orders: 'orders',
     product: 'product',
     order: 'order',
-    booking: 'booking',
-    event: 'event',
+    bookings: 'bookings',
+    events: 'events',
     dateStartParamKey: 'date_gte',
     dateEndParamKey: 'date_lte',
     notRepeatParam: 'repeat=false',
