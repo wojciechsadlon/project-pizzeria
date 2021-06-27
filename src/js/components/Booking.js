@@ -186,7 +186,7 @@ class Booking{
 
     const payload = {
       date: thisBooking.date,
-      hour: thisBooking.hour,
+      hour: thisBooking.hourPicker.value,
       table: parseInt(thisBooking.choosedTableId),
       duration: parseInt(thisBooking.dom.hoursAmount.querySelector('.amount').value),
       ppl: parseInt(thisBooking.dom.peopleAmount.querySelector('.amount').value),
@@ -216,7 +216,7 @@ class Booking{
         return response.json();
       }).then(function(parsedResponse){
         console.log(parsedResponse);
-        thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table)
+        thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
       });
 
     
