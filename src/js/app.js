@@ -2,6 +2,7 @@ import {settings, select, classNames} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
+import Home from './components/Home.js';
 
 const app = {
   initPages: function(){
@@ -9,7 +10,7 @@ const app = {
 
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
-
+    
     const idFromHash = window.location.hash.replace('#/', '');
 
     let pageMatchingHash = thisApp.pages[0].id;
@@ -24,6 +25,28 @@ const app = {
     thisApp.activatePage(pageMatchingHash);
 
     for(let link of thisApp.navLinks){
+      link.addEventListener('click', function(event){
+        const clickedElement = this;
+        event.preventDefault();
+
+        const id = clickedElement.getAttribute('href').replace('#', '');
+
+        thisApp.activatePage(id);
+
+        window.location.hash = '#/' + id;
+      });
+    }
+  },
+
+  initHome: function(){
+    const thisApp = this;
+    const homePage = document.querySelector(select.containerOf.home);
+
+    thisApp.home = new Home(homePage);
+
+    const homeLinks = document.querySelectorAll('a.tile-link');
+
+    for(let link of homeLinks){
       link.addEventListener('click', function(event){
         const clickedElement = this;
         event.preventDefault();
@@ -97,6 +120,7 @@ const app = {
     const thisApp = this;
 
     thisApp.initPages();
+    thisApp.initHome();
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();

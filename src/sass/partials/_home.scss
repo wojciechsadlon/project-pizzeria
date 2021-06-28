@@ -1,0 +1,180 @@
+#home .container {
+  margin-top: 40px;
+  background: $color-light;
+  height: 100vh;
+}
+
+.welcome-tiles {
+  margin: 60px 30px;
+  padding-top: 30px;
+
+  .tile-links {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
+    .tile-link {
+      position: relative;
+      flex: 45%;
+      height: 150px;
+      text-transform: uppercase;
+      color: $color-light;
+      text-decoration: none;
+      margin-bottom: 5px;
+      overflow: hidden;
+
+      .text-link {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        top: 75%;
+        transform: translate(-50%, -50%);
+        transition: all 1s;
+
+        p {
+          margin-top: 60px;
+          font-size: 10px;
+          text-transform: lowercase;
+        }
+
+        &:hover {
+          top: 50%;
+        }
+      }
+    }
+
+    .order {
+      margin-right: 5px;
+      background-image: url('https://images.pexels.com/photos/708587/pexels-photo-708587.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+    }
+
+    .booking {
+      background-image: url('https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+    }
+  }
+
+  .hours {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: $color-main;
+    color: $color-light;
+    text-transform: uppercase;
+  }
+}
+
+.main-carousel {
+  height: 250px;
+  margin: 0px 30px;
+
+  .carousel-cell {
+    display: flex;
+    color: $color-dark;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+
+    .img-wrapper {
+      flex: 30%;
+      height: 200px;
+      width: 200px;
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .text-wrapper {
+      flex: 70%;
+      margin: 25px;
+    }
+  }
+}
+
+.tile-images {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 70px 30px;
+
+  .image-tile {
+    flex: 30%;
+    height: 200px;
+    margin: 5px;
+    background-position: center;
+    background-size: cover;
+
+    div {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color: $color-dark;
+      opacity: 0;
+      transition: all 1s;
+
+      &:hover {
+        opacity: 0.7;
+      }
+
+      p {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: $color-light;
+      }
+
+      i {
+        font-size: 20px;
+        margin: 0 5px;
+        color: $color-light;
+        transition: all 1s;
+        cursor: pointer;
+      }
+
+      .fa-heart:hover {
+        color: $color-danger;
+      }
+      .fa-share-alt:hover {
+        color: $color-success;
+      }
+    }
+  }
+
+  .img1 {
+    background-image: url('https://images.pexels.com/photos/5792322/pexels-photo-5792322.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+  }
+
+  .img2 {
+    background-image: url('https://images.pexels.com/photos/4234939/pexels-photo-4234939.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+  }
+
+  .img3 {
+    background-image: url('https://images.pexels.com/photos/7912401/pexels-photo-7912401.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+  }
+
+  .img4 {
+    background-image: url('https://images.pexels.com/photos/208537/pexels-photo-208537.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+  }
+
+  .img5 {
+    background-image: url('https://images.pexels.com/photos/1435907/pexels-photo-1435907.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+  }
+
+  .img6 {
+    background-image: url('https://images.pexels.com/photos/2918521/pexels-photo-2918521.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+  }
+}
+
+.more-images {
+  color: $color-danger;
+  margin-left: 30px;
+}
+
