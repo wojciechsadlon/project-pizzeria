@@ -84,7 +84,7 @@ class Booking{
     const maxDate = thisBooking.datePicker.maxDate;
 
     for(let item of eventsRepeat){
-      if(item.repeat == 'daily'){
+      if(item.repeat === 'daily'){
         for(let loopDate = minDate; loopDate <= maxDate; loopDate = utils.addDays(loopDate, 1)){
           thisBooking.makeBooked(utils.dateToStr(loopDate), item.hour, item.duration, item.table);
         }
@@ -97,14 +97,14 @@ class Booking{
   makeBooked(date, hour, duration, table){
     const thisBooking = this;
 
-    if(typeof thisBooking.booked[date] == 'undefined'){
+    if(typeof thisBooking.booked[date] === 'undefined'){
       thisBooking.booked[date] = {};
     }
 
     const startHour = utils.hourToNumber(hour);
 
     for(let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5){
-      if(typeof thisBooking.booked[date][hourBlock] == 'undefined'){
+      if(typeof thisBooking.booked[date][hourBlock] === 'undefined'){
         thisBooking.booked[date][hourBlock] = [];
       }
   
@@ -121,9 +121,9 @@ class Booking{
     let allAvailable = false;
 
     if(
-      typeof thisBooking.booked[thisBooking.date] == 'undefined'
+      typeof thisBooking.booked[thisBooking.date] === 'undefined'
       ||
-      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] == 'undefined'
+      typeof thisBooking.booked[thisBooking.date][thisBooking.hour] === 'undefined'
     ){
       allAvailable = true;
     }
@@ -155,8 +155,7 @@ class Booking{
     tables.forEach(function(table){
       table.addEventListener('click', function(event){
         event.preventDefault();
-        const table = event.target;
-        const tableId = event.target.getAttribute(settings.booking.tableIdAttribute);
+        const tableId = table.getAttribute(settings.booking.tableIdAttribute);
         thisBooking.tableChooseReset();
 
         if(!table.classList.contains(classNames.booking.tableBooked)){
@@ -219,7 +218,7 @@ class Booking{
         thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
       });
 
-    
+    thisBooking.updateDOM;
 
   }
 
