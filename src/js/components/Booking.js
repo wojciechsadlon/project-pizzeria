@@ -213,13 +213,10 @@ class Booking{
     fetch(url, options)
       .then(function(response){
         return response.json();
-      }).then(function(parsedResponse){
-        console.log(parsedResponse);
+      }).then(function(){
         thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
+        thisBooking.updateDOM(); 
       });
-
-    thisBooking.updateDOM;
-
   }
 
   render(element){
